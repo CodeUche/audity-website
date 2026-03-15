@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AUDITY — Smart Accounting & Inventory Management</title>
+<meta name="description" content="AUDITY is the all-in-one accounting, tax, and inventory management platform built for modern SMBs. Track finances, manage stock, handle taxes — all from one dashboard."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+<style>
+/* ══════════════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════════════ */
+:root {
+  --ink:       #03080f;
+  --ink-deep:  #060e1c;
+  --ink-card:  #0b1525;
+  --ink-panel: #0f1e33;
+  --ink-line:  #172540;
+  --ink-line2: #1e3050;
+
+  --blue:      #1564e8;
+  --blue-hi:   #3d82ff;
+  --blue-glow: rgba(21,100,232,.18);
+  --blue-pale: rgba(21,100,232,.08);
+
+  --teal:      #00c9b1;
+  --amber:     #f59e0b;
+  --rose:      #f43f5e;
+  --green:     #10b981;
+  --purple:    #8b5cf6;
+
+  --snow:      #ffffff;
+  --snow-80:   rgba(255,255,255,.8);
+  --snow-50:   rgba(255,255,255,.5);
+  --snow-20:   rgba(255,255,255,.12);
+  --snow-08:   rgba(255,255,255,.05);
+
+  --text:      #8ba5c4;
+  --text-dim:  #4d6985;
+
+  --r-sm: 8px;
+  --r:    14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+
+  --font:  'Plus Jakarta Sans', sans-serif;
+  --mono:  'JetBrains Mono', monospace;
+
+  --sh-card: 0 2px 40px rgba(0,0,0,.5);
+  --sh-glow: 0 0 80px rgba(21,100,232,.2);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: var(--font);
+  background: var(--ink);
+  color: var(--snow);
+  overflow-x:hidden;
+  line-height:1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── RESETS & UTILS ── */
+a { text-decoration:none; color:inherit; }
+button { font-family:var(--font); cursor:pointer; border:none; outline:none; }
+img { display:block; max-width:100%; }
+
+.c { max-width:1180px; margin:0 auto; padding:0 28px; }
+.center { text-align:center; }
+
+/* ── BADGE ── */
+.badge {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(21,100,232,.1); border:1px solid rgba(21,100,232,.25);
+  color:var(--blue-hi); font-size:11.5px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  padding:5px 14px; border-radius:100px;
+}
+.badge::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--teal); flex-shrink:0;
+  box-shadow:0 0 6px var(--teal);
+}
+
+/* ── SECTION HEADS ── */
+.sh { margin-bottom:64px; }
+.sh .badge { margin-bottom:18px; }
+.sh h2 {
+  font-size: clamp(30px,4.5vw,52px);
+  font-weight:800; letter-spacing:-.03em; line-height:1.1;
+  margin-bottom:16px;
+}
+.sh p {
+  font-size:17px; color:var(--text);
+  max-width:520px; line-height:1.75;
+}
+.sh.center p { margin:0 auto; }
+
+.grad {
+  background: linear-gradient(130deg, #fff 40%, var(--blue-hi) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.grad-teal {
+  background: linear-gradient(130deg, #fff 30%, var(--teal) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ══════════════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════════════ */
+.btn {
+  display:inline-flex; align-items:center; gap:9px;
+  font-family:var(--font); font-weight:700; font-size:15px;
+  padding:13px 26px; border-radius:var(--r-sm);
+  transition:all .2s; cursor:pointer; white-space:nowrap;
+}
+.btn svg { width:17px; height:17px; flex-shrink:0; }
+.btn-prim {
+  background:var(--blue); color:#fff;
+  box-shadow:0 4px 24px rgba(21,100,232,.45);
+}
+.btn-prim:hover { background:var(--blue-hi); transform:translateY(-2px); box-shadow:0 8px 32px rgba(21,100,232,.55); }
+.btn-line {
+  background:transparent; color:var(--snow-80);
+  border:1.5px solid var(--ink-line2);
+}
+.btn-line:hover { border-color:rgba(21,100,232,.5); background:var(--blue-pale); transform:translateY(-2px); }
+.btn-teal {
+  background:var(--teal); color:var(--ink);
+  box-shadow:0 4px 24px rgba(0,201,177,.35);
+}
+.btn-teal:hover { transform:translateY(-2px); filter:brightness(1.1); }
+.btn-lg { padding:16px 34px; font-size:16px; border-radius:var(--r-sm); }
+.btn-xl { padding:18px 44px; font-size:17px; border-radius:12px; }
+.btn-full { width:100%; justify-content:center; }
+
+/* ══════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════ */
+#nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  padding:0 28px;
+  background:rgba(3,8,15,.75);
+  backdrop-filter:blur(24px) saturate(1.4);
+  border-bottom:1px solid var(--ink-line);
+  transition:background .3s;
+}
+.nav-in {
+  max-width:1180px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  height:66px;
+}
+.logo {
+  display:flex; align-items:center; gap:10px;
+  font-size:20px; font-weight:800; letter-spacing:-.04em; color:var(--snow);
+}
+.logo-mark {
+  width:36px; height:36px; border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),#0040b0);
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; font-weight:900; letter-spacing:-.06em;
+  box-shadow:0 4px 20px rgba(21,100,232,.5);
+  position:relative; overflow:hidden;
+}
+.logo-mark::before {
+  content:''; position:absolute; top:-50%; left:-20%; right:-20%; height:60%;
+  background:linear-gradient(180deg,rgba(255,255,255,.25),transparent);
+  border-radius:0 0 50% 50%;
+}
+.nav-links {
+  display:flex; align-items:center; gap:2px; list-style:none;
+}
+.nav-links a {
+  font-size:13.5px; font-weight:500; color:var(--text);
+  padding:7px 14px; border-radius:7px;
+  transition:color .2s, background .2s;
+}
+.nav-links a:hover { color:var(--snow); background:var(--snow-08); }
+.nav-right { display:flex; align-items:center; gap:10px; }
+
+/* ══════════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════════ */
+#hero {
+  min-height:100vh; padding:110px 28px 80px;
+  display:flex; align-items:center;
+  position:relative; overflow:hidden;
+}
+.hero-glow1 {
+  position:absolute; pointer-events:none;
+  width:900px; height:600px; border-radius:50%;
+  background:radial-gradient(ellipse,rgba(21,100,232,.22) 0%,transparent 70%);
+  top:-100px; left:50%; transform:translateX(-40%);
+}
+.hero-glow2 {
+  position:absolute; pointer-events:none;
+  width:500px; height:500px; border-radius:50%;
+  background:radial-gradient(ellipse,rgba(0,201,177,.1) 0%,transparent 70%);
+  bottom:0; right:0;
+}
+.hero-noise {
+  position:absolute; inset:0; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+.hero-in {
+  position:relative; z-index:1;
+  max-width:1180px; margin:0 auto; width:100%;
+  display:grid; grid-template-columns:1fr 1.1fr;
+  gap:56px; align-items:center;
+}
+.hero-left { max-width:540px; }
+.hero-eyebrow { margin-bottom:26px; display:flex; align-items:center; gap:12px; }
+.hero-version {
+  font-size:11px; font-family:var(--mono); color:var(--text-dim);
+  background:var(--snow-08); padding:4px 10px; border-radius:5px;
+}
+.hero-h1 {
+  font-size:clamp(38px,5.5vw,66px);
+  font-weight:800; letter-spacing:-.04em; line-height:1.05;
+  margin-bottom:22px;
+}
+.hero-p {
+  font-size:18px; color:var(--text); line-height:1.75;
+  margin-bottom:38px; max-width:440px;
+}
+.hero-btns { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:52px; }
+.hero-trust {
+  display:flex; align-items:center; gap:14px;
+  padding-top:28px; border-top:1px solid var(--ink-line);
+}
+.trust-faces {
+  display:flex;
+}
+.trust-face {
+  width:30px; height:30px; border-radius:50%;
+  border:2px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; font-weight:700;
+  margin-left:-8px; first-of-type:margin-left:0;
+}
+.trust-face:first-child { margin-left:0; }
+.tf1 { background:linear-gradient(135deg,#2563eb,#1e40af); }
+.tf2 { background:linear-gradient(135deg,#059669,#047857); }
+.tf3 { background:linear-gradient(135deg,#d97706,#b45309); }
+.tf4 { background:linear-gradient(135deg,#7c3aed,#6d28d9); }
+.trust-text { font-size:13px; color:var(--text); line-height:1.4; }
+.trust-text strong { color:var(--snow); }
+
+/* ══ HERO MOCKUP ══ */
+.hero-right { position:relative; }
+.hero-screen {
+  background:var(--ink-card);
+  border:1px solid var(--ink-line2);
+  border-radius:var(--r-xl);
+  overflow:hidden;
+  box-shadow: var(--sh-card), 0 0 100px rgba(21,100,232,.15);
+  transform:perspective(1200px) rotateY(-4deg) rotateX(2deg);
+  transition:transform .6s ease;
+}
+.hero-screen:hover { transform:perspective(1200px) rotateY(0deg) rotateX(0deg); }
+.win-bar {
+  background:var(--ink-panel); padding:12px 18px;
+  display:flex; align-items:center; gap:10px;
+  border-bottom:1px solid var(--ink-line);
+}
+.wdot { width:11px; height:11px; border-radius:50%; }
+.wr { background:#ff5f57; } .wy { background:#ffbd2e; } .wg { background:#28c840; }
+.wbar-title { flex:1; text-align:center; font-size:11px; color:var(--text-dim); font-family:var(--mono); }
+.win-body { padding:18px; }
+
+/* ── APP SIDEBAR ── */
+.app-layout { display:flex; gap:0; min-height:360px; }
+.app-sidebar {
+  width:52px; background:var(--ink-deep);
+  border-right:1px solid var(--ink-line);
+  display:flex; flex-direction:column;
+  align-items:center; padding:14px 0; gap:6px;
+  border-radius:0 0 0 var(--r);
+}
+.sb-icon {
+  width:34px; height:34px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:15px; cursor:pointer; transition:background .2s;
+}
+.sb-icon:hover { background:var(--snow-08); }
+.sb-icon.active { background:rgba(21,100,232,.2); }
+.sb-divider { width:26px; height:1px; background:var(--ink-line); margin:4px 0; }
+
+/* ── DASHBOARD CONTENT ── */
+.app-main { flex:1; padding:14px; overflow:hidden; }
+.app-topbar {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:14px;
+}
+.app-greeting { font-size:13px; font-weight:600; color:var(--snow); }
+.app-period {
+  font-size:10px; font-family:var(--mono); color:var(--text-dim);
+  background:var(--snow-08); padding:3px 9px; border-radius:5px;
+}
+/* KPI row */
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
+.kpi {
+  background:var(--ink-panel); border:1px solid var(--ink-line);
+  border-radius:var(--r-sm); padding:10px 10px 8px;
+}
+.kpi-lbl { font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.07em; margin-bottom:5px; }
+.kpi-val { font-size:15px; font-weight:700; font-family:var(--mono); }
+.kpi-val.g { color:var(--green); }
+.kpi-val.b { color:var(--blue-hi); }
+.kpi-val.a { color:var(--amber); }
+.kpi-val.w { color:var(--snow); }
+.kpi-delta { font-size:9px; margin-top:3px; }
+.kpi-delta.up { color:var(--green); }
+.kpi-delta.dn { color:var(--rose); }
+
+/* Chart + Table */
+.app-row2 { display:grid; grid-template-columns:1.5fr 1fr; gap:8px; margin-bottom:10px; }
+.app-panel {
+  background:var(--ink-panel); border:1px solid var(--ink-line);
+  border-radius:var(--r-sm); padding:10px;
+}
+.panel-head {
+  font-size:10px; font-weight:700; color:var(--snow-80);
+  margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;
+}
+.panel-sub { font-size:9px; color:var(--text-dim); font-family:var(--mono); }
+
+/* Mini bar chart */
+.minichart { display:flex; align-items:flex-end; gap:4px; height:50px; }
+.mc-bar {
+  flex:1; border-radius:3px 3px 0 0; min-width:0;
+  background:linear-gradient(180deg, var(--blue), rgba(21,100,232,.25));
+  transition:height .4s ease;
+}
+.mc-bar.hi { background:linear-gradient(180deg, var(--teal), rgba(0,201,177,.25)); }
+.mc-labels { display:flex; gap:4px; margin-top:4px; }
+.mc-lbl { flex:1; font-size:8px; color:var(--text-dim); text-align:center; font-family:var(--mono); }
+
+/* Donut chart (CSS) */
+.donut-wrap { display:flex; align-items:center; gap:12px; }
+.donut {
+  width:60px; height:60px; border-radius:50%; flex-shrink:0;
+  background:conic-gradient(var(--blue) 0deg 162deg, var(--teal) 162deg 234deg, var(--amber) 234deg 288deg, var(--rose) 288deg 360deg);
+  position:relative;
+}
+.donut::after {
+  content:''; position:absolute; inset:12px; background:var(--ink-panel);
+  border-radius:50%;
+}
+.donut-legend { display:flex; flex-direction:column; gap:4px; }
+.dl-item { display:flex; align-items:center; gap:5px; font-size:9px; color:var(--text); }
+.dl-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+
+/* Inventory table */
+.inv-table { width:100%; }
+.inv-row {
+  display:grid; grid-template-columns:1fr auto auto;
+  gap:6px; padding:5px 0;
+  border-bottom:1px solid var(--ink-line); font-size:10px;
+  align-items:center;
+}
+.inv-row:last-child { border:none; }
+.inv-name { color:var(--snow-80); font-weight:500; }
+.inv-qty { color:var(--text-dim); font-family:var(--mono); }
+.inv-status {
+  font-size:8.5px; padding:2px 7px; border-radius:4px; font-weight:600;
+}
+.s-ok { background:rgba(16,185,129,.15); color:var(--green); }
+.s-low { background:rgba(245,158,11,.12); color:var(--amber); }
+.s-out { background:rgba(244,63,94,.12); color:var(--rose); }
+
+/* Tax widget */
+.tax-widget {
+  background:linear-gradient(135deg,rgba(21,100,232,.15),rgba(0,201,177,.08));
+  border:1px solid rgba(21,100,232,.3); border-radius:var(--r-sm);
+  padding:10px; display:flex; align-items:center; gap:10px;
+}
+.tax-icon { font-size:20px; }
+.tax-info { flex:1; }
+.tax-title { font-size:10px; font-weight:700; color:var(--snow); margin-bottom:2px; }
+.tax-val { font-size:14px; font-weight:700; font-family:var(--mono); color:var(--teal); }
+.tax-due { font-size:9px; color:var(--text-dim); }
+.tax-btn {
+  background:var(--blue); color:#fff; font-size:9px; font-weight:700;
+  padding:5px 10px; border-radius:5px; white-space:nowrap;
+}
+
+/* Floating notification */
+.hero-notif {
+  position:absolute;
+  background:var(--ink-card); border:1px solid var(--ink-line2);
+  border-radius:12px; padding:10px 14px;
+  box-shadow:var(--sh-card); font-size:12px;
+  animation:bobble 5s ease-in-out infinite;
+}
+@keyframes bobble { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+.notif1 { bottom:14%; left:-32px; animation-delay:.5s; }
+.notif2 { top:8%; right:-24px; animation-delay:1.8s; }
+.notif-inner { display:flex; align-items:center; gap:8px; }
+.notif-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.notif-body { line-height:1.3; }
+.notif-title { font-weight:600; font-size:11px; color:var(--snow); }
+.notif-sub { font-size:10px; color:var(--text-dim); margin-top:1px; }
+
+/* ══════════════════════════════════════════════════
+   STATS STRIP
+══════════════════════════════════════════════════ */
+#stats {
+  border-top:1px solid var(--ink-line);
+  border-bottom:1px solid var(--ink-line);
+  padding:40px 28px;
+  background:linear-gradient(90deg,var(--ink-deep),var(--ink));
+}
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:40px; max-width:900px; margin:0 auto; }
+.stat-item { text-align:center; }
+.stat-n {
+  font-size:clamp(30px,3.5vw,42px); font-weight:800;
+  letter-spacing:-.04em; font-family:var(--mono);
+  background:linear-gradient(135deg,#fff,var(--blue-hi));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; margin-bottom:4px;
+}
+.stat-l { font-size:13px; color:var(--text-dim); font-weight:500; }
+
+/* ══════════════════════════════════════════════════
+   FEATURE DEEP DIVES
+══════════════════════════════════════════════════ */
+#features { padding:110px 28px; }
+.feat-row {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:64px; align-items:center; max-width:1180px; margin:0 auto 100px;
+}
+.feat-row:last-child { margin-bottom:0; }
+.feat-row.flip { direction:rtl; }
+.feat-row.flip > * { direction:ltr; }
+
+.feat-copy .badge { margin-bottom:18px; }
+.feat-copy h3 {
+  font-size:clamp(26px,3.5vw,38px);
+  font-weight:800; letter-spacing:-.03em; line-height:1.15;
+  margin-bottom:16px;
+}
+.feat-copy p { font-size:16px; color:var(--text); line-height:1.75; margin-bottom:28px; }
+
+.feat-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
+.pill {
+  display:flex; align-items:center; gap:6px;
+  background:var(--snow-08); border:1px solid var(--ink-line2);
+  border-radius:100px; padding:6px 14px;
+  font-size:12.5px; font-weight:600; color:var(--snow-80);
+}
+.pill::before { content:'✓'; color:var(--green); font-size:11px; }
+
+/* ── FEATURE SCREENS ── */
+.feat-screen {
+  background:var(--ink-card); border:1px solid var(--ink-line2);
+  border-radius:var(--r-xl); overflow:hidden;
+  box-shadow:var(--sh-card);
+  position:relative;
+}
+.feat-screen-glow {
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(21,100,232,.1),transparent 70%);
+}
+.fs-head {
+  background:var(--ink-panel); padding:12px 16px;
+  display:flex; align-items:center; gap:8px;
+  border-bottom:1px solid var(--ink-line);
+}
+.fs-dots { display:flex; gap:5px; }
+.fs-dot { width:10px; height:10px; border-radius:50%; }
+.fsr { background:#ff5f57; } .fsy { background:#ffbd2e; } .fsg { background:#28c840; }
+.fs-title { font-size:11.5px; color:var(--text-dim); font-family:var(--mono); flex:1; text-align:center; }
+.fs-body { padding:18px; }
+
+/* ── TAX SCREEN ── */
+.tax-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.tax-h { font-size:13px; font-weight:700; color:var(--snow); }
+.tax-period-badge {
+  font-size:10px; font-family:var(--mono); color:var(--teal);
+  background:rgba(0,201,177,.1); border:1px solid rgba(0,201,177,.2);
+  padding:3px 10px; border-radius:5px;
+}
+.tax-cards { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.tax-card {
+  background:var(--ink-panel); border-radius:var(--r-sm);
+  padding:12px 14px; border:1px solid var(--ink-line);
+}
+.tc-lbl { font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+.tc-val { font-size:19px; font-weight:700; font-family:var(--mono); margin-bottom:3px; }
+.tc-val.blue { color:var(--blue-hi); }
+.tc-val.teal { color:var(--teal); }
+.tc-val.amber { color:var(--amber); }
+.tc-val.rose { color:var(--rose); }
+.tc-meta { font-size:9px; color:var(--text-dim); }
+.tax-progress-row { margin-bottom:14px; }
+.tpr-head { display:flex; justify-content:space-between; font-size:10px; margin-bottom:6px; }
+.tpr-label { color:var(--text-dim); }
+.tpr-val { color:var(--snow-80); font-family:var(--mono); }
+.progress-bar { height:6px; background:var(--ink-line); border-radius:3px; overflow:hidden; }
+.progress-fill { height:100%; border-radius:3px; transition:width 1s ease; }
+.pf-blue { background:linear-gradient(90deg,var(--blue),var(--blue-hi)); }
+.pf-teal { background:linear-gradient(90deg,var(--teal),rgba(0,201,177,.6)); }
+.pf-amber { background:linear-gradient(90deg,var(--amber),rgba(245,158,11,.6)); }
+.tax-table { width:100%; }
+.tt-head { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:8px; padding:5px 0; border-bottom:1px solid var(--ink-line); }
+.tt-head span { font-size:9px; color:var(--text-dim); font-weight:600; text-transform:uppercase; letter-spacing:.06em; }
+.tt-row { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:8px; padding:7px 0; border-bottom:1px solid var(--ink-line); font-size:10.5px; align-items:center; }
+.tt-row:last-child { border:none; }
+.tt-name { color:var(--snow-80); font-weight:500; }
+.tt-num { font-family:var(--mono); color:var(--text); }
+.tt-status { font-size:9px; padding:2px 8px; border-radius:4px; font-weight:600; display:inline-block; }
+.st-paid { background:rgba(16,185,129,.15); color:var(--green); }
+.st-pend { background:rgba(245,158,11,.12); color:var(--amber); }
+.st-due { background:rgba(244,63,94,.12); color:var(--rose); }
+
+/* ── INVENTORY SCREEN ── */
+.inv-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.inv-h { font-size:13px; font-weight:700; }
+.inv-add-btn {
+  font-size:10px; font-weight:700; background:var(--blue);
+  color:#fff; padding:4px 12px; border-radius:6px;
+}
+.inv-search {
+  background:var(--ink-panel); border:1px solid var(--ink-line);
+  border-radius:var(--r-sm); padding:7px 12px;
+  font-size:10.5px; color:var(--text-dim);
+  display:flex; align-items:center; gap:6px; margin-bottom:12px;
+}
+.inv-search-icon { font-size:12px; }
+.inv-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.inv-card {
+  background:var(--ink-panel); border:1px solid var(--ink-line);
+  border-radius:10px; padding:11px 10px;
+  transition:border-color .2s;
+}
+.inv-card:hover { border-color:rgba(21,100,232,.4); }
+.inv-card-img {
+  width:100%; height:40px; border-radius:7px; margin-bottom:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+}
+.inv-card-name { font-size:10.5px; font-weight:600; color:var(--snow-80); margin-bottom:3px; }
+.inv-card-sku { font-size:9px; color:var(--text-dim); font-family:var(--mono); margin-bottom:6px; }
+.inv-card-footer { display:flex; justify-content:space-between; align-items:center; }
+.inv-card-qty { font-size:11px; font-family:var(--mono); }
+.inv-card-qty.ok { color:var(--green); }
+.inv-card-qty.lo { color:var(--amber); }
+.inv-card-qty.ot { color:var(--rose); }
+.inv-alert {
+  background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.2);
+  border-radius:var(--r-sm); padding:9px 12px;
+  display:flex; align-items:center; gap:8px; margin-top:10px;
+  font-size:10.5px; color:var(--amber);
+}
+
+/* ── REPORTS SCREEN ── */
+.rpt-tabs { display:flex; gap:4px; margin-bottom:14px; }
+.rpt-tab {
+  font-size:10px; font-weight:600; padding:5px 12px;
+  border-radius:6px; color:var(--text-dim); cursor:pointer;
+}
+.rpt-tab.act { background:rgba(21,100,232,.2); color:var(--blue-hi); }
+.rpt-big-chart { height:90px; margin-bottom:12px; }
+.rbc-bars { display:flex; align-items:flex-end; gap:3px; height:90px; }
+.rbc-bar { flex:1; border-radius:3px 3px 0 0; position:relative; }
+.rbc-bar.income { background:linear-gradient(180deg,var(--blue),rgba(21,100,232,.2)); }
+.rbc-bar.expense { background:linear-gradient(180deg,var(--rose),rgba(244,63,94,.15)); width:60%; }
+.rbc-bar.profit { background:linear-gradient(180deg,var(--green),rgba(16,185,129,.15)); width:40%; }
+.rbc-month-labels { display:flex; gap:0; margin-top:4px; }
+.rbc-ml { flex:1; text-align:center; font-size:8px; color:var(--text-dim); font-family:var(--mono); }
+.rpt-summary { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.rs-item {
+  background:var(--ink-panel); border-radius:8px; padding:10px 10px;
+  border:1px solid var(--ink-line);
+}
+.rs-l { font-size:9px; color:var(--text-dim); margin-bottom:4px; }
+.rs-v { font-size:14px; font-weight:700; font-family:var(--mono); }
+.rs-v.g { color:var(--green); }
+.rs-v.r { color:var(--rose); }
+.rs-v.b { color:var(--blue-hi); }
+.rs-d { font-size:9px; margin-top:2px; }
+.rs-d.up { color:var(--green); }
+.rs-d.dn { color:var(--rose); }
+
+/* ══════════════════════════════════════════════════
+   THEME COMPARISON
+══════════════════════════════════════════════════ */
+#themes { padding:110px 28px; background:var(--ink-deep); }
+.themes-inner { max-width:1180px; margin:0 auto; }
+.themes-sh { margin-bottom:48px; }
+.theme-compare-wrap { position:relative; }
+
+/* Slider comparison */
+.theme-compare {
+  display:grid; grid-template-columns:1fr 1fr; gap:28px;
+  align-items:start;
+}
+.theme-col h4 {
+  text-align:center; font-size:14px; font-weight:700;
+  margin-bottom:16px; display:flex; align-items:center;
+  justify-content:center; gap:8px;
+}
+.theme-badge-dark {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+  padding:4px 12px; border-radius:20px; font-size:12px;
+}
+.theme-badge-light {
+  background:rgba(21,100,232,.1); border:1px solid rgba(21,100,232,.25);
+  color:var(--blue-hi); padding:4px 12px; border-radius:20px; font-size:12px;
+}
+
+/* Dark theme app mockup */
+.tm-dark {
+  background:var(--ink-card); border:1px solid var(--ink-line2);
+  border-radius:var(--r-xl); overflow:hidden;
+  box-shadow:var(--sh-card), 0 0 60px rgba(21,100,232,.1);
+}
+
+/* Light theme app mockup */
+.tm-light {
+  background:#f8fafc; border:1px solid #e2e8f0;
+  border-radius:var(--r-xl); overflow:hidden;
+  box-shadow:0 4px 60px rgba(0,0,0,.15), 0 0 0 1px rgba(255,255,255,.8);
+}
+.tm-light .tw-bar { background:#f1f5f9; border-bottom:1px solid #e2e8f0; }
+.tm-light .tw-title { color:#94a3b8; }
+.tw-bar { background:var(--ink-panel); padding:11px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--ink-line); }
+.tw-title { flex:1; text-align:center; font-size:11px; color:var(--text-dim); font-family:var(--mono); }
+.tw-body { padding:16px; }
+
+/* Light theme colors */
+.lt-sidebar { background:#1e293b; }
+.lt-kpi { background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:10px; }
+.lt-kpi-lbl { font-size:9px; color:#94a3b8; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+.lt-kpi-val { font-size:15px; font-weight:700; font-family:var(--mono); }
+.lt-panel { background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; }
+.lt-panel-head { font-size:11px; font-weight:700; color:#1e293b; margin-bottom:10px; }
+.lt-text { color:#1e293b; }
+.lt-text-dim { color:#64748b; }
+.lt-bar { background:linear-gradient(180deg,#3b82f6,rgba(59,130,246,.2)); }
+.lt-bar-hi { background:linear-gradient(180deg,#06b6d4,rgba(6,182,212,.2)); }
+.lt-inv-row { border-bottom:1px solid #f1f5f9; }
+.lt-s-ok { background:#dcfce7; color:#16a34a; border-radius:4px; }
+.lt-s-low { background:#fef9c3; color:#ca8a04; border-radius:4px; }
+
+/* ══════════════════════════════════════════════════
+   TAX HIGHLIGHT SECTION
+══════════════════════════════════════════════════ */
+#tax-section { padding:110px 28px; }
+.tax-hero {
+  max-width:1180px; margin:0 auto;
+  background:linear-gradient(135deg, var(--ink-card) 0%, rgba(21,100,232,.05) 100%);
+  border:1px solid var(--ink-line2); border-radius:28px;
+  overflow:hidden; position:relative;
+}
+.tax-hero-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 60% 80% at 100% 50%, rgba(0,201,177,.07), transparent 70%);
+}
+.tax-hero-in {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:0; position:relative; z-index:1;
+}
+.tax-left { padding:56px 48px; }
+.tax-left .badge { margin-bottom:22px; }
+.tax-left h2 {
+  font-size:clamp(28px,3.5vw,40px);
+  font-weight:800; letter-spacing:-.03em; line-height:1.15;
+  margin-bottom:18px;
+}
+.tax-left p { font-size:16px; color:var(--text); line-height:1.75; margin-bottom:28px; }
+.tax-list { display:flex; flex-direction:column; gap:14px; margin-bottom:36px; }
+.tax-li { display:flex; align-items:flex-start; gap:12px; }
+.tax-li-icon {
+  width:32px; height:32px; border-radius:8px; flex-shrink:0;
+  background:rgba(0,201,177,.1); border:1px solid rgba(0,201,177,.2);
+  display:flex; align-items:center; justify-content:center; font-size:15px;
+}
+.tax-li-text h5 { font-size:14px; font-weight:600; margin-bottom:2px; }
+.tax-li-text p { font-size:13px; color:var(--text); margin:0; line-height:1.5; }
+.tax-right {
+  padding:28px 32px 28px 20px;
+  display:flex; align-items:center; justify-content:center;
+}
+.tax-right-screen {
+  background:var(--ink-deep); border:1px solid var(--ink-line2);
+  border-radius:var(--r-xl); overflow:hidden; width:100%;
+  box-shadow:0 4px 40px rgba(0,0,0,.5);
+}
+
+/* ══════════════════════════════════════════════════
+   MULTI-BUSINESS
+══════════════════════════════════════════════════ */
+#multi-biz { padding:110px 28px; background:var(--ink-deep); }
+.mb-inner { max-width:1180px; margin:0 auto; }
+.mb-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:56px; }
+.mb-card {
+  background:var(--ink-card); border:1px solid var(--ink-line2);
+  border-radius:var(--r-lg); padding:28px 24px;
+  transition:all .3s; position:relative; overflow:hidden;
+}
+.mb-card::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  opacity:0; transition:opacity .3s;
+}
+.mb-card:hover { transform:translateY(-4px); border-color:rgba(21,100,232,.35); box-shadow:0 12px 40px rgba(21,100,232,.12); }
+.mb-card:hover::after { opacity:1; }
+.mb-c1::after { background:linear-gradient(90deg,var(--blue),var(--blue-hi)); }
+.mb-c2::after { background:linear-gradient(90deg,var(--teal),rgba(0,201,177,.6)); }
+.mb-c3::after { background:linear-gradient(90deg,var(--purple),rgba(139,92,246,.6)); }
+.mb-icon {
+  width:50px; height:50px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:24px; margin-bottom:18px;
+}
+.mb-c1 .mb-icon { background:rgba(21,100,232,.12); }
+.mb-c2 .mb-icon { background:rgba(0,201,177,.1); }
+.mb-c3 .mb-icon { background:rgba(139,92,246,.1); }
+.mb-card h4 { font-size:16px; font-weight:700; margin-bottom:8px; }
+.mb-card p { font-size:13.5px; color:var(--text); line-height:1.65; margin-bottom:16px; }
+.mb-card-tag {
+  font-size:11px; font-family:var(--mono); color:var(--text-dim);
+  background:var(--snow-08); padding:3px 10px; border-radius:5px;
+  display:inline-block;
+}
+
+/* ══════════════════════════════════════════════════
+   TESTIMONIALS / SOCIAL PROOF
+══════════════════════════════════════════════════ */
+#social { padding:100px 28px; }
+.testimonials { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; max-width:1100px; margin:48px auto 0; }
+.tcard {
+  background:var(--ink-card); border:1px solid var(--ink-line);
+  border-radius:var(--r-lg); padding:28px 24px;
+}
+.tcard-stars { font-size:13px; margin-bottom:14px; color:var(--amber); letter-spacing:1px; }
+.tcard-quote { font-size:14px; color:var(--snow-80); line-height:1.7; margin-bottom:20px; font-style:italic; }
+.tcard-author { display:flex; align-items:center; gap:10px; }
+.tcard-avatar {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; flex-shrink:0;
+}
+.ta1 { background:linear-gradient(135deg,#1e40af,#2563eb); }
+.ta2 { background:linear-gradient(135deg,#065f46,#059669); }
+.ta3 { background:linear-gradient(135deg,#92400e,#d97706); }
+.tcard-name { font-size:13px; font-weight:700; }
+.tcard-role { font-size:11px; color:var(--text-dim); }
+
+/* ══════════════════════════════════════════════════
+   DOWNLOAD CTA
+══════════════════════════════════════════════════ */
+#download { padding:110px 28px; }
+.dl-inner { max-width:1100px; margin:0 auto; }
+.dl-card {
+  background:linear-gradient(135deg, var(--ink-card) 0%, rgba(21,100,232,.08) 50%, var(--ink-card) 100%);
+  border:1px solid var(--ink-line2); border-radius:28px;
+  padding:72px 64px; text-align:center; position:relative; overflow:hidden;
+}
+.dl-glow {
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%, rgba(21,100,232,.18), transparent 70%);
+}
+.dl-grid-lines {
+  position:absolute; inset:0; pointer-events:none; opacity:.03;
+  background-image:linear-gradient(var(--ink-line) 1px,transparent 1px),linear-gradient(90deg,var(--ink-line) 1px,transparent 1px);
+  background-size:44px 44px;
+}
+.dl-inner-content { position:relative; z-index:1; }
+.dl-icon { font-size:64px; margin-bottom:22px; }
+.dl-h { font-size:clamp(32px,4.5vw,54px); font-weight:800; letter-spacing:-.03em; margin-bottom:16px; }
+.dl-p { font-size:17px; color:var(--text); max-width:500px; margin:0 auto 44px; line-height:1.7; }
+.dl-btns { display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-bottom:44px; }
+.dl-meta {
+  display:flex; justify-content:center; gap:36px; flex-wrap:wrap;
+}
+.dl-meta-item { display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text-dim); }
+.dl-meta-icon { font-size:15px; }
+
+/* ══════════════════════════════════════════════════
+   WAITLIST
+══════════════════════════════════════════════════ */
+#waitlist { padding:110px 28px; background:var(--ink-deep); }
+.wl-inner { max-width:580px; margin:0 auto; }
+.wl-card {
+  background:var(--ink-card); border:1px solid var(--ink-line2);
+  border-radius:24px; padding:48px 40px; margin-top:44px;
+}
+.form-group { margin-bottom:18px; }
+label { display:block; font-size:12.5px; font-weight:700; color:var(--snow-80); margin-bottom:8px; letter-spacing:.01em; }
+.finput, select {
+  width:100%;
+  background:var(--ink-panel); border:1.5px solid var(--ink-line2);
+  color:var(--snow); font-family:var(--font); font-size:14px;
+  padding:13px 16px; border-radius:10px; outline:none;
+  transition:border-color .2s, box-shadow .2s;
+  appearance:none;
+}
+.finput:focus, select:focus {
+  border-color:var(--blue); box-shadow:0 0 0 3px rgba(21,100,232,.15);
+}
+.finput::placeholder { color:var(--text-dim); }
+select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234d6985' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 16px center; }
+select option { background:var(--ink-card); }
+.wl-submit { width:100%; justify-content:center; margin-top:8px; }
+.wl-note { font-size:12px; color:var(--text-dim); text-align:center; margin-top:14px; }
+.wl-perks { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:28px; }
+.perk {
+  background:var(--ink-panel); border:1px solid var(--ink-line);
+  border-radius:10px; padding:12px; text-align:center; font-size:12px;
+}
+.perk-icon { font-size:20px; margin-bottom:6px; }
+.perk-text { color:var(--text); line-height:1.4; }
+
+/* ══════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════ */
+footer {
+  background:var(--ink-deep); border-top:1px solid var(--ink-line);
+  padding:64px 28px 32px;
+}
+.footer-in { max-width:1180px; margin:0 auto; }
+.footer-top { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:52px; margin-bottom:52px; }
+.footer-brand p { font-size:13.5px; color:var(--text-dim); line-height:1.75; max-width:250px; margin-top:14px; }
+.footer-col h5 { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-dim); margin-bottom:16px; }
+.footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.footer-col a { font-size:13.5px; color:var(--text); transition:color .2s; }
+.footer-col a:hover { color:var(--snow); }
+.footer-bottom {
+  padding-top:28px; border-top:1px solid var(--ink-line);
+  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
+}
+.footer-copy { font-size:13px; color:var(--text-dim); }
+.footer-legal { display:flex; gap:18px; }
+.footer-legal a { font-size:13px; color:var(--text-dim); }
+.footer-legal a:hover { color:var(--snow); }
+
+/* ══════════════════════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════════════════════ */
+.reveal {
+  opacity:0; transform:translateY(28px);
+  transition:opacity .65s ease, transform .65s ease;
+}
+.reveal.in { opacity:1; transform:translateY(0); }
+.reveal.d1 { transition-delay:.1s; }
+.reveal.d2 { transition-delay:.2s; }
+.reveal.d3 { transition-delay:.3s; }
+.reveal.d4 { transition-delay:.4s; }
+
+/* bar chart animate */
+@keyframes growBar { from{height:0%} }
+
+/* counter animate */
+@keyframes countUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.count-anim { animation:countUp .6s ease forwards; }
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════ */
+@media(max-width:1024px) {
+  .hero-in { grid-template-columns:1fr; }
+  .hero-right { display:none; }
+  .feat-row { grid-template-columns:1fr; gap:36px; }
+  .feat-row.flip { direction:ltr; }
+  .theme-compare { grid-template-columns:1fr; }
+  .tax-hero-in { grid-template-columns:1fr; }
+  .tax-right { padding:0 32px 40px; }
+  .mb-grid { grid-template-columns:1fr 1fr; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:32px; }
+  .stats-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media(max-width:768px) {
+  .nav-links { display:none; }
+  .hero-btns { flex-direction:column; align-items:flex-start; }
+  .testimonials { grid-template-columns:1fr; }
+  .mb-grid { grid-template-columns:1fr; }
+  .dl-card { padding:48px 28px; }
+  .wl-card { padding:36px 24px; }
+  .wl-perks { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr; }
+  .tax-left { padding:36px 28px; }
+  .dl-meta { gap:20px; }
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--ink); }
+::-webkit-scrollbar-thumb { background:var(--ink-line2); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(21,100,232,.5); }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     NAV
+════════════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#" class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0;text-decoration:none;line-height:1;">
+      <div style="display:flex;align-items:center;gap:7px;width:100%;">
+        <div style="height:0.5px;flex:1;background:rgba(255,255,255,0.25);"></div>
+        <div style="width:5px;height:5px;border:1.5px solid rgba(255,255,255,0.55);transform:rotate(45deg);flex-shrink:0;"></div>
+        <div style="height:0.5px;flex:1;background:rgba(255,255,255,0.25);"></div>
+      </div>
+      <div style="font-size:21px;font-weight:900;letter-spacing:.18em;color:#fff;padding:0 2px;">AUDITY</div>
+      <div style="font-size:7.5px;font-weight:500;letter-spacing:.35em;color:rgba(255,255,255,0.45);padding:0 2px;">TECHNOLOGIES</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#themes">Themes</a></li>
+      <li><a href="#tax-section">Tax Tools</a></li>
+      <li><a href="#multi-biz">Multi-Business</a></li>
+      <li><a href="#download">Download</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#waitlist" class="btn btn-line" style="font-size:13px;padding:9px 18px;">Join Early Access</a>
+      <div style="display:inline-flex;flex-direction:column;align-items:center;">
+      <a href="#download" class="btn btn-prim" style="background:#4b5563;border-color:#4b5563;cursor:not-allowed;pointer-events:none;opacity:0.85;font-size:13px;padding:9px 18px;pointer-events:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download
+      </a>
+      <span style="display:block;font-size:10px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,0.55);margin-top:3px;text-transform:uppercase;">Coming soon</span>
+    </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-glow1"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-in c">
+
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="hero-eyebrow reveal">
+        <span class="badge">Now in Early Access</span>
+        <span class="hero-version">v1.0 Beta</span>
+      </div>
+      <h1 class="hero-h1 reveal d1">
+        Your Business Finances,<br/>
+        <span class="grad">Finally Under Control</span>
+      </h1>
+      <p class="hero-p reveal d2">
+        AUDITY handles accounting, inventory, taxes, and reports in one elegant dashboard — so you can focus on growing your business, not managing spreadsheets.
+      </p>
+      <div class="hero-btns reveal d3">
+        <div style="display:inline-flex;flex-direction:column;align-items:center;">
+          <a href="#download" class="btn btn-prim btn-lg" style="background:#4b5563;border-color:#4b5563;cursor:not-allowed;pointer-events:none;opacity:0.85;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download for Windows
+          </a>
+          <span style="display:block;font-size:10px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,0.55);margin-top:3px;text-transform:uppercase;">Coming soon</span>
+        </div>
+        <a href="#waitlist" class="btn btn-teal btn-lg">
+          Join Early Access →
+        </a>
+      </div>
+      <div class="hero-trust reveal d4">
+        <div class="trust-faces">
+          <div class="trust-face tf1">OA</div>
+          <div class="trust-face tf2">CF</div>
+          <div class="trust-face tf3">NB</div>
+          <div class="trust-face tf4">IM</div>
+        </div>
+        <div class="trust-text">
+          <strong>2,400+ business owners</strong> on the waitlist<br/>
+          Free during early access • No credit card needed
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — LIVE APP MOCKUP -->
+    <div class="hero-right reveal d2">
+      <div class="hero-screen">
+        <div class="win-bar">
+          <div class="wdot wr"></div><div class="wdot wy"></div><div class="wdot wg"></div>
+          <div class="wbar-title">AUDITY Desktop — Dashboard</div>
+        </div>
+        <div class="win-body" style="padding:12px;">
+          <div class="app-layout">
+            <!-- Sidebar -->
+            <div class="app-sidebar">
+              <div class="sb-icon active">📊</div>
+              <div class="sb-icon">📦</div>
+              <div class="sb-icon">💳</div>
+              <div class="sb-icon">📋</div>
+              <div class="sb-divider"></div>
+              <div class="sb-icon">🏢</div>
+              <div class="sb-divider"></div>
+              <div class="sb-icon">⚙️</div>
+            </div>
+            <!-- Main -->
+            <div class="app-main">
+              <div class="app-topbar">
+                <span class="app-greeting">Good morning, Tunde 👋</span>
+                <span class="app-period">Oct 2024</span>
+              </div>
+              <!-- KPIs -->
+              <div class="kpi-row">
+                <div class="kpi">
+                  <div class="kpi-lbl">Revenue</div>
+                  <div class="kpi-val g">₦4.2M</div>
+                  <div class="kpi-delta up">↑ 18% vs Sep</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-lbl">Expenses</div>
+                  <div class="kpi-val a">₦1.1M</div>
+                  <div class="kpi-delta dn">↑ 5% vs Sep</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-lbl">Net Profit</div>
+                  <div class="kpi-val b">₦3.1M</div>
+                  <div class="kpi-delta up">↑ 22% vs Sep</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-lbl">VAT Due</div>
+                  <div class="kpi-val w">₦315K</div>
+                  <div class="kpi-delta" style="color:var(--amber)">Due Nov 21</div>
+                </div>
+              </div>
+              <!-- Row 2 -->
+              <div class="app-row2">
+                <div class="app-panel">
+                  <div class="panel-head">
+                    Monthly Revenue
+                    <span class="panel-sub">2024</span>
+                  </div>
+                  <div class="minichart" id="heroChart">
+                    <div class="mc-bar" style="height:42%"></div>
+                    <div class="mc-bar" style="height:55%"></div>
+                    <div class="mc-bar" style="height:38%"></div>
+                    <div class="mc-bar" style="height:70%"></div>
+                    <div class="mc-bar" style="height:60%"></div>
+                    <div class="mc-bar" style="height:82%"></div>
+                    <div class="mc-bar hi" style="height:95%"></div>
+                  </div>
+                  <div class="mc-labels">
+                    <span class="mc-lbl">Apr</span><span class="mc-lbl">May</span>
+                    <span class="mc-lbl">Jun</span><span class="mc-lbl">Jul</span>
+                    <span class="mc-lbl">Aug</span><span class="mc-lbl">Sep</span>
+                    <span class="mc-lbl" style="color:var(--teal)">Oct</span>
+                  </div>
+                </div>
+                <div class="app-panel">
+                  <div class="panel-head">Revenue Split</div>
+                  <div class="donut-wrap">
+                    <div class="donut"></div>
+                    <div class="donut-legend">
+                      <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div>Products 45%</div>
+                      <div class="dl-item"><div class="dl-dot" style="background:var(--teal)"></div>Services 20%</div>
+                      <div class="dl-item"><div class="dl-dot" style="background:var(--amber)"></div>Wholesale 15%</div>
+                      <div class="dl-item"><div class="dl-dot" style="background:var(--rose)"></div>Other 10%</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Tax widget -->
+              <div class="tax-widget">
+                <div class="tax-icon">🏛️</div>
+                <div class="tax-info">
+                  <div class="tax-title">VAT Calculation Ready</div>
+                  <div class="tax-val">₦315,000</div>
+                  <div class="tax-due">Due: 21 November 2024</div>
+                </div>
+                <div class="tax-btn">File Now</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating notifications -->
+      <div class="hero-notif notif1">
+        <div class="notif-inner">
+          <div class="notif-dot" style="background:var(--green)"></div>
+          <div class="notif-body">
+            <div class="notif-title">Report Generated ✓</div>
+            <div class="notif-sub">Q3 P&amp;L — PDF ready</div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-notif notif2">
+        <div class="notif-inner">
+          <span style="font-size:18px;">⚠️</span>
+          <div class="notif-body">
+            <div class="notif-title">Low Stock Alert</div>
+            <div class="notif-sub">Rice 50kg — 8 units left</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     STATS
+════════════════════════════════════ -->
+<div id="stats">
+  <div class="stats-grid c" style="max-width:1000px;">
+    <div class="stat-item reveal">
+      <div class="stat-n" data-target="2400">0</div>
+      <div class="stat-l">Businesses on waitlist</div>
+    </div>
+    <div class="stat-item reveal d1">
+      <div class="stat-n">99.9%</div>
+      <div class="stat-l">Uptime reliability</div>
+    </div>
+    <div class="stat-item reveal d2">
+      <div class="stat-n">6</div>
+      <div class="stat-l">Core modules built-in</div>
+    </div>
+    <div class="stat-item reveal d3">
+      <div class="stat-n">Free</div>
+      <div class="stat-l">During early access</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     FEATURE 1 — DASHBOARD & REPORTING
+════════════════════════════════════ -->
+<section id="features" style="padding:110px 28px;">
+  <div class="c">
+
+    <!-- INTRO -->
+    <div class="sh center reveal" style="margin-bottom:80px;">
+      <div class="badge">What AUDITY Can Do</div>
+      <h2>Every tool your business<br/><span class="grad">needs, nothing it doesn't</span></h2>
+      <p>Built specifically for Nigerian and African SMBs — every feature is purposeful, every screen is fast.</p>
+    </div>
+
+    <!-- F1: FINANCIAL REPORTS -->
+    <div class="feat-row reveal">
+      <div class="feat-copy">
+        <span class="badge">Financial Reports</span>
+        <h3>Professional reports,<br/><span class="grad">one click away</span></h3>
+        <p>Generate P&amp;L statements, balance sheets, and cash flow reports in seconds. Export to PDF or Excel and share with accountants, investors, or tax authorities.</p>
+        <div class="feat-pills">
+          <div class="pill">Profit & Loss</div>
+          <div class="pill">Balance Sheet</div>
+          <div class="pill">Cash Flow</div>
+          <div class="pill">Trial Balance</div>
+          <div class="pill">Export PDF & Excel</div>
+        </div>
+        <div style="display:inline-flex;flex-direction:column;align-items:center;"><a href="#download" class="btn btn-prim btn-lg" style="background:#4b5563;border-color:#4b5563;cursor:not-allowed;pointer-events:none;opacity:0.85;">Get AUDITY Free</a><span style="display:block;font-size:10px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,0.55);margin-top:3px;text-transform:uppercase;">Coming soon</span></div>
+      </div>
+      <div class="feat-screen">
+        <div class="feat-screen-glow"></div>
+        <div class="fs-head">
+          <div class="fs-dots"><div class="fs-dot fsr"></div><div class="fs-dot fsy"></div><div class="fs-dot fsg"></div></div>
+          <div class="fs-title">AUDITY — Financial Reports</div>
+        </div>
+        <div class="fs-body">
+          <div class="rpt-tabs">
+            <div class="rpt-tab act">P&amp;L Statement</div>
+            <div class="rpt-tab">Balance Sheet</div>
+            <div class="rpt-tab">Cash Flow</div>
+          </div>
+          <div class="rpt-big-chart">
+            <div class="rbc-bars">
+              <div class="rbc-bar income" style="height:55%"></div>
+              <div class="rbc-bar expense" style="height:38%;width:50%"></div>
+              <div class="rbc-bar profit" style="height:34%;width:36%"></div>
+              <div style="flex:.3"></div>
+              <div class="rbc-bar income" style="height:68%"></div>
+              <div class="rbc-bar expense" style="height:42%;width:50%"></div>
+              <div class="rbc-bar profit" style="height:38%;width:36%"></div>
+              <div style="flex:.3"></div>
+              <div class="rbc-bar income" style="height:82%"></div>
+              <div class="rbc-bar expense" style="height:48%;width:50%"></div>
+              <div class="rbc-bar profit" style="height:48%;width:36%"></div>
+              <div style="flex:.3"></div>
+              <div class="rbc-bar income" style="height:95%;"></div>
+              <div class="rbc-bar expense" style="height:52%;width:50%"></div>
+              <div class="rbc-bar profit" style="height:58%;width:36%; background:linear-gradient(180deg,var(--teal),rgba(0,201,177,.15))"></div>
+            </div>
+            <div class="rbc-month-labels">
+              <span class="rbc-ml">Jul</span><span class="rbc-ml">Aug</span><span class="rbc-ml">Sep</span><span class="rbc-ml">Oct</span>
+            </div>
+          </div>
+          <div class="rpt-summary">
+            <div class="rs-item">
+              <div class="rs-l">Total Revenue</div>
+              <div class="rs-v b">₦4.2M</div>
+              <div class="rs-d up">↑ 18.4%</div>
+            </div>
+            <div class="rs-item">
+              <div class="rs-l">Total Expenses</div>
+              <div class="rs-v r">₦1.1M</div>
+              <div class="rs-d dn">↑ 5.2%</div>
+            </div>
+            <div class="rs-item">
+              <div class="rs-l">Net Profit</div>
+              <div class="rs-v g">₦3.1M</div>
+              <div class="rs-d up">↑ 22.1%</div>
+            </div>
+          </div>
+          <div style="margin-top:12px;display:flex;gap:8px;">
+            <button style="flex:1;padding:8px;background:var(--blue);color:#fff;font-size:11px;font-weight:700;border-radius:7px;border:none;cursor:pointer;">📄 Export PDF</button>
+            <button style="flex:1;padding:8px;background:rgba(16,185,129,.15);color:var(--green);font-size:11px;font-weight:700;border-radius:7px;border:1px solid rgba(16,185,129,.2);">📊 Export Excel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- F2: INVENTORY -->
+    <div class="feat-row flip reveal" style="margin-top:80px;">
+      <div class="feat-copy">
+        <span class="badge">Inventory Management</span>
+        <h3>Know your stock<br/><span class="grad-teal">down to the last unit</span></h3>
+        <p>Track every product, manage reorder levels, get low-stock alerts before you run out, and connect inventory directly to your sales and accounting records.</p>
+        <div class="feat-pills">
+          <div class="pill">Real-time stock levels</div>
+          <div class="pill">Low-stock alerts</div>
+          <div class="pill">Reorder management</div>
+          <div class="pill">Supplier tracking</div>
+          <div class="pill">Barcode support</div>
+        </div>
+        <a href="#waitlist" class="btn btn-teal btn-lg">Join Early Access</a>
+      </div>
+      <div class="feat-screen">
+        <div class="feat-screen-glow"></div>
+        <div class="fs-head">
+          <div class="fs-dots"><div class="fs-dot fsr"></div><div class="fs-dot fsy"></div><div class="fs-dot fsg"></div></div>
+          <div class="fs-title">AUDITY — Inventory</div>
+        </div>
+        <div class="fs-body">
+          <div class="inv-header">
+            <span class="inv-h" style="font-size:13px;font-weight:700;">All Products</span>
+            <span class="inv-add-btn">+ Add Product</span>
+          </div>
+          <div class="inv-search">
+            <span class="inv-search-icon">🔍</span>
+            <span>Search products, SKUs...</span>
+          </div>
+          <div class="inv-grid">
+            <div class="inv-card">
+              <div class="inv-card-img" style="background:rgba(21,100,232,.1);">🍚</div>
+              <div class="inv-card-name">Rice 50kg</div>
+              <div class="inv-card-sku">SKU-001</div>
+              <div class="inv-card-footer">
+                <span class="inv-card-qty ok">124 units</span>
+                <span class="s-ok" style="font-size:9px;padding:2px 6px;border-radius:4px;">In Stock</span>
+              </div>
+            </div>
+            <div class="inv-card">
+              <div class="inv-card-img" style="background:rgba(245,158,11,.1);">🛢️</div>
+              <div class="inv-card-name">Palm Oil 25L</div>
+              <div class="inv-card-sku">SKU-002</div>
+              <div class="inv-card-footer">
+                <span class="inv-card-qty lo">8 units</span>
+                <span class="s-low" style="font-size:9px;padding:2px 6px;border-radius:4px;">Low Stock</span>
+              </div>
+            </div>
+            <div class="inv-card">
+              <div class="inv-card-img" style="background:rgba(16,185,129,.1);">📱</div>
+              <div class="inv-card-name">Phone Cases</div>
+              <div class="inv-card-sku">SKU-003</div>
+              <div class="inv-card-footer">
+                <span class="inv-card-qty ok">250 units</span>
+                <span class="s-ok" style="font-size:9px;padding:2px 6px;border-radius:4px;">In Stock</span>
+              </div>
+            </div>
+            <div class="inv-card">
+              <div class="inv-card-img" style="background:rgba(244,63,94,.1);">⚡</div>
+              <div class="inv-card-name">Power Banks</div>
+              <div class="inv-card-sku">SKU-004</div>
+              <div class="inv-card-footer">
+                <span class="inv-card-qty ot">0 units</span>
+                <span class="s-out" style="font-size:9px;padding:2px 6px;border-radius:4px;">Out of Stock</span>
+              </div>
+            </div>
+            <div class="inv-card">
+              <div class="inv-card-img" style="background:rgba(139,92,246,.1);">🧴</div>
+              <div class="inv-card-name">Hair Cream</div>
+              <div class="inv-card-sku">SKU-005</div>
+              <div class="inv-card-footer">
+                <span class="inv-card-qty lo">12 units</span>
+                <span class="s-low" style="font-size:9px;padding:2px 6px;border-radius:4px;">Low Stock</span>
+              </div>
+            </div>
+            <div class="inv-card">
+              <div class="inv-card-img" style="background:rgba(0,201,177,.1);">🥤</div>
+              <div class="inv-card-name">Water (24pk)</div>
+              <div class="inv-card-sku">SKU-006</div>
+              <div class="inv-card-footer">
+                <span class="inv-card-qty ok">480 units</span>
+                <span class="s-ok" style="font-size:9px;padding:2px 6px;border-radius:4px;">In Stock</span>
+              </div>
+            </div>
+          </div>
+          <div class="inv-alert">
+            ⚠️ <strong>2 products need restocking</strong> — tap to view reorder list
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     THEME COMPARISON
+════════════════════════════════════ -->
+<section id="themes">
+  <div class="themes-inner">
+    <div class="sh center reveal themes-sh">
+      <div class="badge">Dark & Light Mode</div>
+      <h2>Works beautifully in<br/><span class="grad">any environment</span></h2>
+      <p>Switch between dark and light mode with one click. AUDITY adapts to your preference and your workspace — the same powerful app, two beautiful looks.</p>
+    </div>
+    <div class="theme-compare reveal">
+
+      <!-- DARK THEME -->
+      <div>
+        <h4><span class="theme-badge-dark">🌙 Dark Mode</span></h4>
+        <div class="tm-dark">
+          <div class="tw-bar">
+            <div class="fs-dots"><div class="fs-dot fsr"></div><div class="fs-dot fsy"></div><div class="fs-dot fsg"></div></div>
+            <div class="tw-title">AUDITY — Expense Tracker</div>
+          </div>
+          <div class="tw-body">
+            <div style="font-size:12px;font-weight:700;margin-bottom:12px;color:var(--snow);">Expense Overview — October 2024</div>
+            <div class="kpi-row" style="grid-template-columns:1fr 1fr;gap:8px;">
+              <div class="kpi"><div class="kpi-lbl">Total Spent</div><div class="kpi-val a">₦1.1M</div></div>
+              <div class="kpi"><div class="kpi-lbl">Budget Left</div><div class="kpi-val g">₦400K</div></div>
+            </div>
+            <div style="margin:12px 0;background:var(--ink-panel);border-radius:8px;padding:12px;border:1px solid var(--ink-line);">
+              <div style="font-size:10px;color:var(--text-dim);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">By Category</div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:var(--snow-80);">Supplies</span><span style="color:var(--text-dim);font-family:var(--mono);">₦380K · 34%</span></div>
+                  <div class="progress-bar"><div class="progress-fill pf-blue" style="width:34%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:var(--snow-80);">Salaries</span><span style="color:var(--text-dim);font-family:var(--mono);">₦320K · 29%</span></div>
+                  <div class="progress-bar"><div class="progress-fill pf-teal" style="width:29%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:var(--snow-80);">Logistics</span><span style="color:var(--text-dim);font-family:var(--mono);">₦240K · 22%</span></div>
+                  <div class="progress-bar"><div class="progress-fill pf-amber" style="width:22%"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:var(--snow-80);">Utilities</span><span style="color:var(--text-dim);font-family:var(--mono);">₦160K · 15%</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:15%;background:linear-gradient(90deg,var(--rose),rgba(244,63,94,.5))"></div></div>
+                </div>
+              </div>
+            </div>
+            <div style="background:var(--ink-panel);border:1px solid var(--ink-line);border-radius:8px;overflow:hidden;">
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;border-bottom:1px solid var(--ink-line);">
+                <span style="font-size:9px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Description</span>
+                <span style="font-size:9px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Amount</span>
+                <span style="font-size:9px;color:var(--text-dim);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Category</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;border-bottom:1px solid var(--ink-line);font-size:10.5px;">
+                <span style="color:var(--snow-80);">Office Supplies</span>
+                <span style="color:var(--rose);font-family:var(--mono);">-₦45,000</span>
+                <span style="font-size:9px;background:rgba(21,100,232,.12);color:var(--blue-hi);padding:2px 7px;border-radius:4px;">Supplies</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;border-bottom:1px solid var(--ink-line);font-size:10.5px;">
+                <span style="color:var(--snow-80);">Staff Salaries</span>
+                <span style="color:var(--rose);font-family:var(--mono);">-₦320,000</span>
+                <span style="font-size:9px;background:rgba(0,201,177,.1);color:var(--teal);padding:2px 7px;border-radius:4px;">Salaries</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;font-size:10.5px;">
+                <span style="color:var(--snow-80);">Waybill / Logistics</span>
+                <span style="color:var(--rose);font-family:var(--mono);">-₦78,000</span>
+                <span style="font-size:9px;background:rgba(245,158,11,.1);color:var(--amber);padding:2px 7px;border-radius:4px;">Logistics</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LIGHT THEME -->
+      <div>
+        <h4><span class="theme-badge-light">☀️ Light Mode</span></h4>
+        <div class="tm-light">
+          <div class="tw-bar">
+            <div class="fs-dots"><div class="fs-dot fsr"></div><div class="fs-dot fsy"></div><div class="fs-dot fsg"></div></div>
+            <div class="tw-title" style="color:#94a3b8;">AUDITY — Expense Tracker</div>
+          </div>
+          <div class="tw-body">
+            <div style="font-size:12px;font-weight:700;margin-bottom:12px;color:#1e293b;">Expense Overview — October 2024</div>
+            <div class="kpi-row" style="grid-template-columns:1fr 1fr;gap:8px;">
+              <div class="lt-kpi"><div class="lt-kpi-lbl">Total Spent</div><div class="lt-kpi-val" style="color:#d97706;">₦1.1M</div></div>
+              <div class="lt-kpi"><div class="lt-kpi-lbl">Budget Left</div><div class="lt-kpi-val" style="color:#059669;">₦400K</div></div>
+            </div>
+            <div style="margin:12px 0;background:#fff;border-radius:8px;padding:12px;border:1px solid #e2e8f0;">
+              <div style="font-size:10px;color:#94a3b8;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em;">By Category</div>
+              <div style="display:flex;flex-direction:column;gap:7px;">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:#334155;">Supplies</span><span style="color:#94a3b8;font-family:var(--mono);">₦380K · 34%</span></div>
+                  <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="height:100%;width:34%;background:linear-gradient(90deg,#3b82f6,#93c5fd);border-radius:3px;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:#334155;">Salaries</span><span style="color:#94a3b8;font-family:var(--mono);">₦320K · 29%</span></div>
+                  <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="height:100%;width:29%;background:linear-gradient(90deg,#06b6d4,#67e8f9);border-radius:3px;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:#334155;">Logistics</span><span style="color:#94a3b8;font-family:var(--mono);">₦240K · 22%</span></div>
+                  <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="height:100%;width:22%;background:linear-gradient(90deg,#f59e0b,#fcd34d);border-radius:3px;"></div></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:4px;"><span style="color:#334155;">Utilities</span><span style="color:#94a3b8;font-family:var(--mono);">₦160K · 15%</span></div>
+                  <div style="height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div style="height:100%;width:15%;background:linear-gradient(90deg,#f43f5e,#fda4af);border-radius:3px;"></div></div>
+                </div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;">
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;border-bottom:1px solid #f1f5f9;">
+                <span style="font-size:9px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Description</span>
+                <span style="font-size:9px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Amount</span>
+                <span style="font-size:9px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Category</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;border-bottom:1px solid #f1f5f9;font-size:10.5px;">
+                <span style="color:#334155;">Office Supplies</span>
+                <span style="color:#dc2626;font-family:var(--mono);">-₦45,000</span>
+                <span style="font-size:9px;background:#eff6ff;color:#2563eb;padding:2px 7px;border-radius:4px;">Supplies</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;border-bottom:1px solid #f1f5f9;font-size:10.5px;">
+                <span style="color:#334155;">Staff Salaries</span>
+                <span style="color:#dc2626;font-family:var(--mono);">-₦320,000</span>
+                <span style="font-size:9px;background:#f0fdf4;color:#16a34a;padding:2px 7px;border-radius:4px;">Salaries</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:8px;padding:7px 10px;font-size:10.5px;">
+                <span style="color:#334155;">Waybill / Logistics</span>
+                <span style="color:#dc2626;font-family:var(--mono);">-₦78,000</span>
+                <span style="font-size:9px;background:#fffbeb;color:#d97706;padding:2px 7px;border-radius:4px;">Logistics</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA BELOW COMPARISON -->
+    <div style="text-align:center;margin-top:48px;" class="reveal">
+      <p style="color:var(--text);margin-bottom:20px;font-size:15px;">Both themes are included free. Switch anytime in Settings → Appearance.</p>
+      <div style="display:inline-flex;flex-direction:column;align-items:center;">
+      <a href="#download" class="btn btn-prim btn-lg" style="background:#4b5563;border-color:#4b5563;cursor:not-allowed;pointer-events:none;opacity:0.85;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Try AUDITY Free
+      </a>
+      <span style="display:block;font-size:10px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,0.55);margin-top:3px;text-transform:uppercase;">Coming soon</span>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     TAX HIGHLIGHT
+════════════════════════════════════ -->
+<section id="tax-section">
+  <div class="tax-hero reveal" style="max-width:1180px;margin:0 auto;">
+    <div class="tax-hero-bg"></div>
+    <div class="tax-hero-in">
+      <div class="tax-left">
+        <span class="badge">Tax & Compliance</span>
+        <h2>VAT, PAYE &amp; Business Tax —<br/><span class="grad-teal">handled automatically</span></h2>
+        <p>Stop dreading tax season. AUDITY tracks VAT on every transaction, calculates PAYE deductions, flags tax deadlines, and generates tax summaries ready for filing.</p>
+        <div class="tax-list">
+          <div class="tax-li">
+            <div class="tax-li-icon">🏛️</div>
+            <div class="tax-li-text">
+              <h5>Automatic VAT Calculation</h5>
+              <p>Every sale and purchase is tracked with the correct VAT rate. Monthly summaries generated automatically.</p>
+            </div>
+          </div>
+          <div class="tax-li">
+            <div class="tax-li-icon">📅</div>
+            <div class="tax-li-text">
+              <h5>Tax Deadline Reminders</h5>
+              <p>Never miss a filing deadline. AUDITY alerts you 2 weeks before due dates — VAT, PAYE, CIT and more.</p>
+            </div>
+          </div>
+          <div class="tax-li">
+            <div class="tax-li-icon">📋</div>
+            <div class="tax-li-text">
+              <h5>Tax-Ready Reports</h5>
+              <p>Generate FIRS-compliant summaries at any time. Print or export for your accountant or tax consultant.</p>
+            </div>
+          </div>
+        </div>
+        <a href="#download" class="btn btn-teal btn-lg">
+          Start Managing Taxes →
+        </a>
+      </div>
+      <div class="tax-right">
+        <div class="tax-right-screen">
+          <div class="fs-head">
+            <div class="fs-dots"><div class="fs-dot fsr"></div><div class="fs-dot fsy"></div><div class="fs-dot fsg"></div></div>
+            <div class="fs-title">AUDITY — Tax Centre</div>
+          </div>
+          <div class="fs-body">
+            <div class="tax-header">
+              <span class="tax-h">Tax Overview</span>
+              <span class="tax-period-badge">Q4 2024</span>
+            </div>
+            <div class="tax-cards">
+              <div class="tax-card">
+                <div class="tc-lbl">VAT Collected</div>
+                <div class="tc-val blue">₦504,000</div>
+                <div class="tc-meta">From 247 invoices</div>
+              </div>
+              <div class="tax-card">
+                <div class="tc-lbl">VAT Input</div>
+                <div class="tc-val teal">₦189,000</div>
+                <div class="tc-meta">From purchases</div>
+              </div>
+              <div class="tax-card">
+                <div class="tc-lbl">VAT Payable</div>
+                <div class="tc-val amber">₦315,000</div>
+                <div class="tc-meta">Net liability</div>
+              </div>
+              <div class="tax-card">
+                <div class="tc-lbl">PAYE Deducted</div>
+                <div class="tc-val rose">₦96,000</div>
+                <div class="tc-meta">4 employees</div>
+              </div>
+            </div>
+            <!-- Progress rows -->
+            <div style="background:var(--ink-panel);border:1px solid var(--ink-line);border-radius:8px;padding:12px;margin-bottom:12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--snow-80);margin-bottom:10px;">Filing Progress</div>
+              <div class="tax-progress-row">
+                <div class="tpr-head"><span class="tpr-label">VAT Filing — October</span><span class="tpr-val">Due: 21 Nov</span></div>
+                <div class="progress-bar"><div class="progress-fill pf-blue" style="width:72%"></div></div>
+              </div>
+              <div class="tax-progress-row" style="margin-top:8px;">
+                <div class="tpr-head"><span class="tpr-label">PAYE Remittance</span><span class="tpr-val">Due: 10 Nov</span></div>
+                <div class="progress-bar"><div class="progress-fill pf-teal" style="width:100%"></div></div>
+              </div>
+              <div class="tax-progress-row" style="margin-top:8px;">
+                <div class="tpr-head"><span class="tpr-label">Annual CIT Return</span><span class="tpr-val">Due: Mar 2025</span></div>
+                <div class="progress-bar"><div class="progress-fill pf-amber" style="width:25%"></div></div>
+              </div>
+            </div>
+            <!-- Tax table -->
+            <div style="background:var(--ink-panel);border:1px solid var(--ink-line);border-radius:8px;overflow:hidden;">
+              <div class="tt-head" style="padding:6px 10px;">
+                <span>Tax Type</span><span>Amount</span><span>Period</span><span>Status</span>
+              </div>
+              <div class="tt-row" style="padding:7px 10px;">
+                <span class="tt-name">VAT (Output)</span>
+                <span class="tt-num">₦504K</span>
+                <span class="tt-num">Oct 24</span>
+                <span class="tt-status st-pend">Pending</span>
+              </div>
+              <div class="tt-row" style="padding:7px 10px;">
+                <span class="tt-name">PAYE (Staff)</span>
+                <span class="tt-num">₦96K</span>
+                <span class="tt-num">Oct 24</span>
+                <span class="tt-status st-paid">Filed ✓</span>
+              </div>
+              <div class="tt-row" style="padding:7px 10px;">
+                <span class="tt-name">VAT (Sep)</span>
+                <span class="tt-num">₦281K</span>
+                <span class="tt-num">Sep 24</span>
+                <span class="tt-status st-paid">Filed ✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     MULTI-BUSINESS
+════════════════════════════════════ -->
+<section id="multi-biz">
+  <div class="mb-inner">
+    <div class="sh center reveal">
+      <div class="badge">Multi-Business</div>
+      <h2>One app.<br/><span class="grad">All your businesses.</span></h2>
+      <p>Switch between businesses in seconds. Each gets its own separate books, inventory, and reports — all under one login.</p>
+    </div>
+    <div class="mb-grid">
+      <div class="mb-card mb-c1 reveal">
+        <div class="mb-icon">🏪</div>
+        <h4>Retail Store</h4>
+        <p>Track stock, manage sales, reconcile daily cash — the complete retail toolkit built right into your accounting.</p>
+        <span class="mb-card-tag">POS integration coming soon</span>
+      </div>
+      <div class="mb-card mb-c2 reveal d1">
+        <div class="mb-icon">🍽️</div>
+        <h4>Restaurant / Food</h4>
+        <p>Handle ingredient inventory, staff PAYE, daily sales recording, and food cost analysis all in one place.</p>
+        <span class="mb-card-tag">Ingredient costing</span>
+      </div>
+      <div class="mb-card mb-c3 reveal d2">
+        <div class="mb-icon">🏭</div>
+        <h4>Manufacturing / Wholesale</h4>
+        <p>Bill of materials, production tracking, bulk purchase management — designed for complex business models.</p>
+        <span class="mb-card-tag">BOM support</span>
+      </div>
+    </div>
+
+    <!-- Business switcher mockup -->
+    <div class="reveal" style="margin-top:48px;text-align:center;">
+      <div style="display:inline-block;background:var(--ink-card);border:1px solid var(--ink-line2);border-radius:16px;padding:20px 28px;box-shadow:var(--sh-card);">
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:14px;text-transform:uppercase;letter-spacing:.08em;">Switch Business</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+          <div style="background:rgba(21,100,232,.15);border:1.5px solid var(--blue);border-radius:10px;padding:10px 16px;text-align:left;min-width:130px;">
+            <div style="font-size:11px;font-weight:700;color:var(--snow);">Tunde Stores</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Retail · Active</div>
+            <div style="font-size:10px;color:var(--teal);margin-top:4px;font-family:var(--mono);">₦4.2M rev</div>
+          </div>
+          <div style="background:var(--ink-panel);border:1px solid var(--ink-line);border-radius:10px;padding:10px 16px;text-align:left;min-width:130px;">
+            <div style="font-size:11px;font-weight:700;color:var(--snow);">Mama's Kitchen</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Restaurant</div>
+            <div style="font-size:10px;color:var(--blue-hi);margin-top:4px;font-family:var(--mono);">₦1.8M rev</div>
+          </div>
+          <div style="background:var(--ink-panel);border:1px solid var(--ink-line);border-radius:10px;padding:10px 16px;text-align:left;min-width:130px;">
+            <div style="font-size:11px;font-weight:700;color:var(--snow);">TJ Wholesale</div>
+            <div style="font-size:10px;color:var(--text-dim);margin-top:2px;">Wholesale</div>
+            <div style="font-size:10px;color:var(--amber);margin-top:4px;font-family:var(--mono);">₦8.4M rev</div>
+          </div>
+          <div style="background:var(--ink-panel);border:1.5px dashed var(--ink-line2);border-radius:10px;padding:10px 16px;text-align:center;min-width:80px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <div style="font-size:20px;color:var(--text-dim);">+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════ -->
+<section id="social">
+  <div class="c">
+    <div class="sh center reveal">
+      <div class="badge">Early Access Reviews</div>
+      <h2>Business owners<br/><span class="grad">already love it</span></h2>
+    </div>
+    <div class="testimonials">
+      <div class="tcard reveal">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-quote">"I used to spend every Sunday reconciling my books on Excel. With AUDITY, my weekly close takes 20 minutes. It's genuinely changed how I run my shop."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar ta1">OA</div>
+          <div>
+            <div class="tcard-name">Olumide Adeyemi</div>
+            <div class="tcard-role">Electronics Retailer, Lagos</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard reveal d1">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-quote">"The tax section alone is worth it. I never knew exactly how much VAT I owed until AUDITY showed me in real time. My accountant is impressed."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar ta2">CF</div>
+          <div>
+            <div class="tcard-name">Chidinma Eze</div>
+            <div class="tcard-role">Food Distributor, Enugu</div>
+          </div>
+        </div>
+      </div>
+      <div class="tcard reveal d2">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-quote">"Managing two businesses used to mean two spreadsheets. Now it's one app, one password, and I can see both businesses side by side. Incredible product."</p>
+        <div class="tcard-author">
+          <div class="tcard-avatar ta3">NB</div>
+          <div>
+            <div class="tcard-name">Nuhu Bello</div>
+            <div class="tcard-role">Wholesale & Restaurant Owner, Kano</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     DOWNLOAD CTA
+════════════════════════════════════ -->
+<section id="download">
+  <div class="dl-inner">
+    <div class="dl-card reveal">
+      <div class="dl-glow"></div>
+      <div class="dl-grid-lines"></div>
+      <div class="dl-inner-content">
+        <div class="dl-icon">⬇</div>
+        <h2 class="dl-h">Download AUDITY.<br/><span class="grad">It's completely free.</span></h2>
+        <p class="dl-p">The full accounting and inventory platform — available for Windows now. No subscriptions, no limits, no catch during early access.</p>
+        <div class="dl-btns">
+          <!-- ↓ Replace href with your actual Windows installer URL -->
+          <div style="display:inline-flex;flex-direction:column;align-items:center;">
+            <a href="#" class="btn btn-prim btn-xl" style="background:#4b5563;border-color:#4b5563;cursor:not-allowed;pointer-events:none;opacity:0.85;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:20px;height:20px;"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Download for Windows (.exe)
+            </a>
+            <span style="display:block;font-size:10px;font-weight:500;letter-spacing:.08em;color:rgba(255,255,255,0.55);margin-top:3px;text-transform:uppercase;">Coming soon</span>
+          </div>
+          <a href="#waitlist" class="btn btn-teal btn-xl">Join Early Access →</a>
+        </div>
+        <div class="dl-meta">
+          <div class="dl-meta-item"><span class="dl-meta-icon">🖥️</span>Windows 10 & 11</div>
+          <div class="dl-meta-item"><span class="dl-meta-icon">📦</span>v1.0.0 Beta · ~85 MB</div>
+          <div class="dl-meta-item"><span class="dl-meta-icon">🔒</span>Virus-scanned & Safe</div>
+          <div class="dl-meta-item"><span class="dl-meta-icon">⚡</span>5-minute setup</div>
+          <div class="dl-meta-item"><span class="dl-meta-icon">🆓</span>Free during beta</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     WAITLIST
+════════════════════════════════════ -->
+<section id="waitlist">
+  <div class="wl-inner">
+    <div class="sh center reveal">
+      <div class="badge">Early Access</div>
+      <h2>Get in before<br/><span class="grad">everyone else</span></h2>
+      <p style="margin:0 auto;">Early access members get priority features, direct support, and locked-in founder pricing when we launch paid plans.</p>
+    </div>
+
+    <div class="wl-perks reveal">
+      <div class="perk">
+        <div class="perk-icon">🎁</div>
+        <div class="perk-text">Free access to all features during beta</div>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">💬</div>
+        <div class="perk-text">Direct line to the founding team</div>
+      </div>
+      <div class="perk">
+        <div class="perk-icon">🔒</div>
+        <div class="perk-text">Founder pricing locked forever</div>
+      </div>
+    </div>
+
+    <div class="wl-card reveal d1">
+      <div class="form-group">
+        <label for="wl-name">Full Name</label>
+        <input class="finput" id="wl-name" type="text" placeholder="Chukwuemeka Obi"/>
+      </div>
+      <div class="form-group">
+        <label for="wl-email">Business Email</label>
+        <input class="finput" id="wl-email" type="email" placeholder="you@yourbusiness.com"/>
+      </div>
+      <div class="form-group">
+        <label for="wl-biz">Business Type</label>
+        <select id="wl-biz">
+          <option disabled selected value="">Select your business type</option>
+          <option>Retail / Shop</option>
+          <option>Restaurant / Food Service</option>
+          <option>E-commerce / Online Store</option>
+          <option>Wholesale / Distribution</option>
+          <option>Manufacturing</option>
+          <option>Services / Consulting</option>
+          <option>Healthcare / Pharmacy</option>
+          <option>Agriculture / Farming</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <button class="btn btn-prim btn-lg wl-submit" onclick="submitWL()">
+        Request Early Access →
+      </button>
+      <p class="wl-note">🔒 Zero spam. We respect your privacy completely.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
+<footer>
+  <div class="footer-in">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo" style="display:flex;flex-direction:column;align-items:center;gap:0;text-decoration:none;line-height:1;">
+          <div style="display:flex;align-items:center;gap:7px;width:100%;">
+            <div style="height:0.5px;flex:1;background:rgba(255,255,255,0.25);"></div>
+            <div style="width:5px;height:5px;border:1.5px solid rgba(255,255,255,0.55);transform:rotate(45deg);flex-shrink:0;"></div>
+            <div style="height:0.5px;flex:1;background:rgba(255,255,255,0.25);"></div>
+          </div>
+          <div style="font-size:21px;font-weight:900;letter-spacing:.18em;color:#fff;padding:0 2px;">AUDITY</div>
+          <div style="font-size:7.5px;font-weight:500;letter-spacing:.35em;color:rgba(255,255,255,0.45);padding:0 2px;">TECHNOLOGIES</div>
+    </a>
+        <p>Smart accounting and inventory management for modern businesses. Built by Audity Technologies.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Product</h5>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#themes">Themes</a></li>
+          <li><a href="#tax-section">Tax Tools</a></li>
+          <li><a href="#download">Download</a></li>
+          <li><a href="#waitlist">Early Access</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Docs</a></li>
+          <li><a href="#">Community</a></li>
+          <li><a href="#"><span class="__cf_email__" data-cfemail="b8d0ddd4d4d7f8d9cddcd1ccc1ccdddbd096dbd7d5">[email&#160;protected]</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2024 Audity Technologies. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════
+     JS
+════════════════════════════════════ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── Intersection observer for reveal animations
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+
+// ── Nav scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').style.background =
+    window.scrollY > 50 ? 'rgba(3,8,15,0.96)' : 'rgba(3,8,15,0.75)';
+});
+
+// ── Animate chart bars on load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelectorAll('.mc-bar, .rbc-bar').forEach((bar, i) => {
+      const h = bar.style.height;
+      bar.style.height = '0';
+      setTimeout(() => { bar.style.transition = 'height .7s ease'; bar.style.height = h; }, i * 80);
+    });
+  }, 400);
+});
+
+// ── Counter animation for stats
+const countEl = document.querySelector('[data-target]');
+if (countEl) {
+  const countObs = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      const target = +countEl.dataset.target;
+      let current = 0;
+      const inc = target / 50;
+      const timer = setInterval(() => {
+        current = Math.min(current + inc, target);
+        countEl.textContent = Math.floor(current).toLocaleString() + '+';
+        if (current >= target) clearInterval(timer);
+      }, 30);
+      countObs.unobserve(countEl);
+    }
+  });
+  countObs.observe(countEl);
+}
+
+// ── Waitlist form
+async function submitWL() {
+  const n = document.getElementById('wl-name').value.trim();
+  const e = document.getElementById('wl-email').value.trim();
+  const b = document.getElementById('wl-biz').value;
+  if (!n) { showWLError('Please enter your full name.'); return; }
+  if (!e || !/\S+@\S+\.\S+/.test(e)) { showWLError('Please enter a valid email address.'); return; }
+  if (!b) { showWLError('Please select your business type.'); return; }
+
+  const btn = document.querySelector('.wl-submit');
+  btn.textContent = 'Joining…';
+  btn.disabled = true;
+  clearWLError();
+
+  try {
+    const res = await fetch('https://formspree.io/f/mkoqvzjy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ name: n, email: e, business_type: b })
+    });
+    const data = await res.json();
+    if (res.ok) {
+      btn.textContent = '✓ You\'re on the list!';
+      btn.style.background = 'var(--green)';
+      document.getElementById('wl-name').value = '';
+      document.getElementById('wl-email').value = '';
+      document.getElementById('wl-biz').selectedIndex = 0;
+      showWLSuccess('🎉 Welcome aboard! We\'ll be in touch when AUDITY is ready for you.');
+    } else {
+      btn.textContent = 'Join Early Access';
+      btn.disabled = false;
+      showWLError(data.errors ? data.errors.map(err => err.message).join(', ') : 'Something went wrong. Please try again.');
+    }
+  } catch (err) {
+    btn.textContent = 'Join Early Access';
+    btn.disabled = false;
+    showWLError('Network error — please check your connection and try again.');
+  }
+}
+
+function showWLError(msg) {
+  let el = document.getElementById('wl-feedback');
+  if (!el) { el = document.createElement('p'); el.id = 'wl-feedback'; el.style.cssText = 'margin-top:12px;font-size:13px;text-align:center;'; document.querySelector('.wl-submit').after(el); }
+  el.style.color = '#f87171';
+  el.textContent = msg;
+}
+
+function showWLSuccess(msg) {
+  let el = document.getElementById('wl-feedback');
+  if (!el) { el = document.createElement('p'); el.id = 'wl-feedback'; el.style.cssText = 'margin-top:12px;font-size:13px;text-align:center;'; document.querySelector('.wl-submit').after(el); }
+  el.style.color = 'var(--green)';
+  el.textContent = msg;
+}
+
+function clearWLError() {
+  const el = document.getElementById('wl-feedback');
+  if (el) el.textContent = '';
+}
+-e 
+</script>
+</body>
+</html>
