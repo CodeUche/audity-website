@@ -1035,7 +1035,8 @@ body::before {
 .wl-form-wrap {
   background: var(--navy);
   border-radius: 4px; overflow: hidden;
-  box-shadow: 0 24px 60px rgba(11,31,62,0.2);
+  border: 1px solid rgba(212,160,23,0.18);
+  box-shadow: 0 24px 80px rgba(11,31,62,0.35), 0 0 0 1px rgba(212,160,23,0.06);
 }
 .wl-form-header {
   background: var(--cobalt);
@@ -1051,52 +1052,16 @@ body::before {
   color: rgba(212,160,23,0.5); letter-spacing: 1px;
 }
 .wl-form-body { padding: 28px; }
-.wl-form { display: flex; flex-direction: column; gap: 16px; }
-.wl-field { display: flex; flex-direction: column; gap: 8px; }
-.wl-label {
-  font-family: var(--mono); font-size: 10px; font-weight: 600;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(247,241,232,0.45);
+.wl-form-body--tally {
+  padding: 0;
+  position: relative;
 }
-.wl-input, .wl-select {
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(247,241,232,0.1);
-  border-radius: 2px;
-  color: var(--cream);
-  font-family: var(--body); font-size: 15px; font-weight: 400;
-  outline: none;
-  transition: border-color var(--t1), background var(--t1);
-}
-.wl-input::placeholder { color: rgba(247,241,232,0.22); }
-.wl-input:focus, .wl-select:focus {
-  border-color: var(--gold);
-  background: rgba(255,255,255,0.06);
-}
-.wl-select { cursor: pointer; }
-.wl-select option { background: var(--navy); }
-.wl-submit {
-  padding: 18px;
-  background: var(--gold);
-  color: var(--ink);
-  font-family: var(--mono); font-size: 12px; font-weight: 700;
-  letter-spacing: 2.5px; text-transform: uppercase;
-  border-radius: 2px;
-  transition: background var(--t1), transform var(--t2), box-shadow var(--t2);
-  margin-top: 4px;
-}
-.wl-submit:hover { background: var(--gold-hot); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212,160,23,0.3); }
-.wl-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-.wl-msg {
-  font-family: var(--mono); font-size: 12px; font-weight: 600;
-  padding: 12px 16px; border-radius: 2px;
-  display: none; letter-spacing: 0.5px;
-}
-.wl-msg.success { display: block; color: var(--cr); background: rgba(14,122,95,0.1); border: 1px solid rgba(14,122,95,0.2); }
-.wl-msg.error { display: block; color: var(--dr); background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.15); }
-.wl-privacy {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 0.3px;
-  color: rgba(247,241,232,0.25); text-align: center; margin-top: 4px;
+.wl-form-body--tally::after {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-ember), var(--gold), var(--gold-hot), var(--gold));
+  opacity: 0.6;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -1826,35 +1791,11 @@ body::before {
         <span class="wl-form-header-title">Waitlist Application</span>
         <span class="wl-form-ref">REF: AUDITY/WL/2026</span>
       </div>
-      <div class="wl-form-body">
-        <form class="wl-form" id="wlForm">
-          <div class="wl-field">
-            <label class="wl-label" for="wl-name">Full Name</label>
-            <input class="wl-input" id="wl-name" type="text" placeholder="e.g. Ugo Musa" required autocomplete="name">
-          </div>
-          <div class="wl-field">
-            <label class="wl-label" for="wl-email">Business Email</label>
-            <input class="wl-input" id="wl-email" type="email" placeholder="you@company.com" required autocomplete="email">
-          </div>
-          <div class="wl-field">
-            <label class="wl-label" for="wl-biz">Business Type</label>
-            <select class="wl-select" id="wl-biz" required>
-              <option value="" disabled selected>Select your business type</option>
-              <option value="retail">Retail / Trading</option>
-              <option value="manufacturing">Manufacturing</option>
-              <option value="services">Professional Services</option>
-              <option value="food">Food &amp; Beverage</option>
-              <option value="logistics">Logistics / Transport</option>
-              <option value="accountant">Accounting Firm</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <button class="wl-submit" type="button" id="wlSubmit" onclick="submitWL()">
-            Submit Application — Free
-          </button>
-          <div class="wl-msg" id="wlMsg"></div>
-          <p class="wl-privacy">No spam. No credit card. Your data stays in Nigeria.</p>
-        </form>
+      <div class="wl-form-body wl-form-body--tally">
+        <iframe data-tally-src="https://tally.so/embed/0Qj0X6?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+          loading="lazy" width="100%" height="360" frameborder="0"
+          marginheight="0" marginwidth="0" title="Audity Waitlist Application"
+          style="display:block;min-height:360px;"></iframe>
       </div>
     </div>
   </div>
@@ -1977,60 +1918,18 @@ const countObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 countEls.forEach(el => countObserver.observe(el));
 
-// WAITLIST — FORMSPREE
-async function submitWL() {
-  const n   = document.getElementById('wl-name').value.trim();
-  const e   = document.getElementById('wl-email').value.trim();
-  const b   = document.getElementById('wl-biz').value;
-  const btn = document.getElementById('wlSubmit');
-  const msg = document.getElementById('wlMsg');
-
-  msg.className = 'wl-msg';
-
-  if (!n) { showMsg('Please enter your full name.', 'error'); return; }
-  if (!e || !/\S+@\S+\.\S+/.test(e)) { showMsg('Please enter a valid email.', 'error'); return; }
-  if (!b) { showMsg('Please select your business type.', 'error'); return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Submitting…';
-
-  try {
-    const res = await fetch('https://formspree.io/f/mkoqvzjy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ name: n, email: e, business_type: b, _subject: 'New Audity Waitlist Signup' })
-    });
-    if (res.ok) {
-      btn.textContent = '✓ Application Received';
-      btn.style.background = '#0E7A5F';
-      btn.style.color = '#FFFFFF';
-      showMsg('🎉 You\'re on the list. We\'ll be in touch with priority access details.', 'success');
-      document.getElementById('wl-name').value = '';
-      document.getElementById('wl-email').value = '';
-      document.getElementById('wl-biz').value = '';
-    } else {
-      btn.disabled = false;
-      btn.textContent = 'Submit Application — Free';
-      showMsg('Something went wrong. Please try again.', 'error');
-    }
-  } catch {
-    btn.disabled = false;
-    btn.textContent = 'Submit Application — Free';
-    showMsg('Network error. Check your connection and try again.', 'error');
+// Tally waitlist embed — load Tally's embed script dynamically
+(function() {
+  var d = document, w = 'https://tally.so/widgets/embed.js';
+  var v = function() {
+    if (typeof Tally !== 'undefined') { Tally.loadEmbeds(); }
+    else { d.querySelectorAll('iframe[data-tally-src]:not([src])').forEach(function(e) { e.src = e.dataset.tallySrc; }); }
+  };
+  if (typeof Tally !== 'undefined') { v(); }
+  else if (!d.querySelector('script[src="' + w + '"]')) {
+    var s = d.createElement('script'); s.src = w; s.onload = v; s.onerror = v; d.body.appendChild(s);
   }
-}
-function showMsg(text, type) {
-  const msg = document.getElementById('wlMsg');
-  msg.textContent = text;
-  msg.className = 'wl-msg ' + type;
-}
-
-// Prevent mobile form scroll weirdness
-document.querySelectorAll('.wl-input, .wl-select').forEach(el => {
-  el.addEventListener('focus', () => {
-    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
-  });
-});
+})();
 </script>
 
 </body>
